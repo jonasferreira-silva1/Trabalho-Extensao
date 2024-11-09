@@ -6,21 +6,17 @@ import { Course } from '../model/course';
 import { CoursePage } from '../model/course-page';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CoursesService {
+  private readonly API = '/api/courses';
 
-  private readonly API = 'api/courses';
-
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   list(page = 0, pageSize = 10) {
-    return this.httpClient.get<CoursePage>(this.API, { params: { page, pageSize } })
-      .pipe(
-        first(),
-        // delay(5000),
-        // tap(courses => console.log(courses))
-      );
+    return this.httpClient
+      .get<CoursePage>(this.API, { params: { page, pageSize } })
+      .pipe(first());
   }
 
   findById(id: string) {
@@ -39,11 +35,12 @@ export class CoursesService {
   }
 
   private update(course: Partial<Course>) {
-    return this.httpClient.put<Course>(`${this.API}/${course._id}`, course).pipe(first());
+    return this.httpClient
+      .put<Course>(`${this.API}/${course._id}`, course)
+      .pipe(first());
   }
 
   delete(id: string) {
     return this.httpClient.delete(`${this.API}/${id}`).pipe(first());
   }
-
 }
